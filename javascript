@@ -1,102 +1,59 @@
-const startBtn = document.getElementById("startBtn");
-const result = document.getElementById("result");
-const processing = document.getElementById("processing");
+setInterval(() =>{
+    let today = new Date();
+    let h = today.getHours();
+    let m = today.getMinutes();
+    m = checkTime(m);
+    let time = h + ":" + m;
+    document.getElementById('time').innerHTML = time;
+},1000);
 
-const SpeechRecognition = window.SpeechRecognition 
-                          || window.webkitSpeechRecognition;
-let toggleBtn = null;
-if (typeof SpeechRecognition === "undefined") {
-  startBtn.remove();
-  result.innerHTML = "Your browser doesn't support Speech API. Please download latest Chrome version.";
+function checkTime(i){
+    if(i<10){
+        i = "0" + i;
+    }
+    return i;
 }
 
-const recognition = new SpeechRecognition();
-recognition.continuous = true;
-recognition.interimResults = true;
-
-recognition.onresult = event => {
-    const current = event.resultIndex;
-    const recognitionResult = event.results[current];
-    const recognitionText = recognitionResult[0].transcript;
-   
-    if (recognitionResult.isFinal) {
-      processing.innerHTML = "processing ...";
-  
-      const response = process(recognitionText);
-      const p = document.createElement("p");
-      p.innerHTML = `<strong>You said:</strong> ${recognitionText} 
-                     </br><strong>Sonya said:</strong> ${response}`;
-      processing.innerHTML = "";
-      result.appendChild(p);
-      
-      readOutLoud(response);
+// notifications 
+function getWeekday(){
+    let newDate = new Date();
+    let today = newDate.getDay();
+    let notificationsMsg = document.getElementById('notifications');
+    if(today == 1){
+        notificationsMsg.innerHTML = "“All Motivation Mondays need are a little more coffee and a lot more mascara.” —Unknown"
+    } else if(today == 2) {
+        notificationsMsg.innerHTML = "“Whatever you are, be a good one.” ―Abraham Lincoln"
+    } else if(today == 3) {
+        notificationsMsg.innerHTML = "“Everything you can imagine is real.”―Pablo Picasso"
+    } else if(today == 4) {
+        notificationsMsg.innerHTML = "“Your passion is waiting for your courage to catch up.” —Isabelle Lafleche"
+    } else if(today == 5) {
+        notificationsMsg.innerHTML = "“I challenge you to let every day be a Friday. Permit yourself to be happy every day.” —Joel Osteen” —John D. Rockefeller"
+    } else if(today == 6) {
+        notificationsMsg.innerHTML = "“Don’t be afraid to give up the good to go for the great.” —John D. Rockefeller"
     } else {
-      processing.innerHTML = `listening: ${recognitionText}`;
-    }
-  };
+        notificationsMsg.innerHTML = "No one is to blame for your future situation but yourself. If you want to be successful, then become Successful.’” ―Jaymin Shah"
+    }   
+}
 
-  let listening = false;
+getWeekday();
 
-toggleBtn = () => {
-  if (listening) {
-    recognition.stop();
-    startBtn.textContent = "Start listening";
-  } else {
-    recognition.start();
-    startBtn.textContent = "Stop listening";
-  }
-  listening = !listening;
-};
+// Weather 
+const proxy = 'https://cors-anywhere.herokuapp.com/';
+let weatherIcon = document.querySelector('.weather__icon');
+let weatherTitle = document.querySelector('.weather__title');
 
-startBtn.addEventListener("click", toggleBtn);
-
-function process(rawText) {
-    let text = rawText.replace(/\s/g, "").replace(/\'/g, "");
-    text = text.toLowerCase();
-    let response = null;
-  
-    if (text.includes("hello") || text.trim() == "hi" || text.includes("hey")) {
-      response = getRandomItemFromArray(hello);
-    } else if (text.includes("your name")) {
-      response = "My name's Sonya.";
-    } else if (text.includes("howareyou")||text.includes("whatsup")) {
-      response = "I'm fine. How about you?";
-    } else if (text.includes("whattimeisit")) {
-        response = "You really took time out of your day to open this program to ask me that?" && 
-        response = new Date().toLocaleTimeString();
-    } else if (text.includes("joke")) {
-      response = getRandomItemFromArray(joke);
-    } else if (text.includes("flip") && text.includes("coin")) {
-      response = Math.random() < 0.5 ? 'heads' : 'tails';
-    } else if (text.includes("bye") || text.includes("stop")) {
-      response = "Bye!!";
-      toggleBtn();
-    }
-  
-    if (!response) {
-      window.open(`http://google.com/search?q=${rawText.replace("search", "")}`,
-                  "_blank");
-      return `I found some information for ${rawText}`;
-    }
-  
-    return response;
-  }
-
-  function getRandomItemFromArray(array) {
-    const randomItem = array[Math.floor(Math.random() * array.length)];
-    return randomItem;
-  };
-
-//   Eve's Voice
-  function readOutLoud(message) {
-    const speech = new SpeechSynthesisUtterance();
-    
-    speech.text = message;
-    speech.volume = 1;
-    speech.rate = 1;
-    speech.pitch = 1.8;
-    speech.voice = voices[3];
-  
-    window.speechSynthesis.speak(speech);
-  }
-
+function getWeather() {
+    fetch(`https://api.openweathermap.org/data/2.5/weather?q=London,uk&appid=a66440674bd9c7028ab11101418e6844`)
+    .then(response => {
+        return response.json()
+    }) 
+    .then(data => { 
+        console.log(data);
+        weatherTitle.innerHTML = data.weather[0].description;
+        weatherIcon.classList.add(`owf-${data.weather[0].id}`);
+        getWeatherPhoto(data.weather[0].description);
+    })
+    .catch(err => {
+    })
+}
