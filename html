@@ -4,70 +4,35 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Voice Assistant</title>
-    <!-- <link rel="javascript" href="javascript.js"> -->
-    <link rel="stylesheet" href="style.css">
+    <title>Eve</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com"> 
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin> 
+<link href="https://fonts.googleapis.com/css2?family=Shantell+Sans:wght@300&display=swap" rel="stylesheet">
 </head>
 <body>
-    
-    <div id="content">
-        <h1>Hi, I'm Eve. How can I help you?</h1>
-        <p>Give it a try with 'hi/hello', 'how are you', 'joke', 'coin 
-        flip', 'what's your name', 'what time is it', 'bye/stop'</p>
-        <p>You can also try 'play despacito' &#128516;. It will play 
-        on Youtube. Note: the pop-up may be blocked by your browser</p>
-      </div>
-      <button id="startBtn">Start listening</button>
-      <div id="result"></div>
-      <p id="processing"></p>
-    
-    <!-- <script>
-         // The JavaScript Part Starts
-         const btn = document.querySelector('.talk');
-        const content = document.querySelector('.content');
+    <div class="wrapper">
 
-     
-        const YouTube = [
-            'Ya sure I guess'
-     ];
-        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-        const recognition =  new SpeechRecognition();
+        <a name="anchorHome"></a>
+        <section id="home">
+            <div class="link"><a href="#anchorWeather">Weather</a></div>
+            <div id="time"></div>
+            <div id="notifications">Notificantions</div>
+            <div id="demo">Say "Eve, show weather...</div>
 
-        recognition.onstart = function(){
-            console.log('How Can I Help You ?')
-        }
-        recognition.onresult = function (event) {
-            const current = event.resultIndex;
+            <div id="talk">Click Me</div>
+        </section>
 
-            const transcript = event.results[current][0].transcript;
-            content.textContent = transcript;
-            readOutLoud(transcript);
+        <a name="anchorWeather"></a>
+        <section id="weather">
+            <div class="link"><a href="#anchorHome">Home</a></div>
+            <div id="weatherstuff">
+                <div class="weatherIcon">Icon</div>
+                <div id="weatherTitle">Weather</div>
+            </div>
 
-        };
-
-        btn.addEventListener('click', () =>{
-            recognition.start();
-        });
-
-
-        function readOutLoud(message){
-            const speech = new SpeechSynthesisUtterance();
-
-            speech.text = 'I am not able to understand , miss maam';
-
-
-            if(message.includes('YouTube')){
-                const finalText = 
-                    YouTube[Math.floor(Math.random()*YouTube.length)];
-                speech.text = finalText; 
-                window.open('https://www.youtube.com/')
-                }
-            speech.volume = 1;
-            speech.rate = 1.1;
-            speech.pitch = 1;
-
-            window.speechSynthesis.speak(speech);
-        }
-    </script> -->
+        </section>
+    </div>
+    <script src="/js/javascript.js"></script>
 </body>
 </html>
